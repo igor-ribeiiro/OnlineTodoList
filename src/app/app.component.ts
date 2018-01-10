@@ -20,7 +20,7 @@ export class AppComponent {
 
     this.Todo = Parse.Object.extend('Todo');
     const query = new Parse.Query(this.Todo);
-    query.ascending('createdAt').limit(3).find().then(todos => {
+    query.ascending('createdAt').limit(5).find().then(todos => {
       this.todos = new Set(todos);
     }).catch(error => {
       alert('Failed to retrieving objects, with error code: ' + error.message);
