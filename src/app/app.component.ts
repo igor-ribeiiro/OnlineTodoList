@@ -18,6 +18,12 @@ export class AppComponent {
     Parse.serverURL = environment.serverURL;
     Parse.liveQueryServerURL = environment.liveQueryServerURL;
 
+    const client = new Parse.LiveQueryClient({
+        applicationId: environment.PARSE_APP_ID,
+        serverURL: environment.liveQueryServerURL, // Example: 'wss://livequerytutorial.back4app.io'
+        javascriptKey: environment.PARSE_JS_KEY
+    });
+    client.open();
     this.Todo = Parse.Object.extend('Todo');
     const query = new Parse.Query(this.Todo);
     query.ascending('createdAt').limit(5).find().then(todos => {
@@ -26,7 +32,7 @@ export class AppComponent {
       alert('Failed to retrieving objects, with error code: ' + error.message);
     });
 
-    const subscription = query.subscribe();
+    const subscription = client.subscribe(query);
     subscription.on('create', todo => {
       this.todos.add(todo);
       console.log('On create event');
